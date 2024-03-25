@@ -1,0 +1,68 @@
+.container{
+
+  .total{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+
+    .input-group{
+      display: flex;
+      justify-content: space-between;
+      align-content: center;
+      width: 50%;
+    }
+  }
+
+  label{
+    font-weight: bold;
+    text-transform: uppercase;
+    //background-color: #EE7505;
+    //color: white;
+  }
+
+  figure{
+    //margin: 2rem 0;
+    width: 100%;
+    display: flex;
+    justify-content: center !important;
+
+    img{
+      border: #000 1px solid;
+      border-radius: 20px;
+      height: 100px !important;
+      width: 100px !important;
+    }
+  }
+}
+
+@media (min-width: 1024px) {
+  .container{
+
+    .total{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+
+      .input-group{
+        display: flex;
+        justify-content: space-between;
+        align-content: center;
+        width: 80%;
+      }
+    }
+
+
+    figure{
+      img{
+        height: 300px !important;
+        width: 350px !important;
+      }
+    }
+
+    button{
+      padding: 1rem 2.5rem;
+    }
+  }
+}

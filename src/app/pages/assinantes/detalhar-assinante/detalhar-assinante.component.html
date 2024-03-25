@@ -1,0 +1,65 @@
+<section class="container">
+  <h2 class="text-center">Detalhar do Assinante</h2>
+  <div class="row">
+    <div class="col-md-4 mt-md-5">
+      <figure class="figure justify-content-center align-content-center">
+        <div *ngIf="assinante.imagem != ''; then imagemParam; else imagemDefault"></div>
+        <!--      <figcaption class="figure-caption text-end">A caption for the above image.</figcaption>-->
+      </figure>
+      <div class="mt-md-2 total">
+        <div class="input-group mb-3">
+          <label class="input-group-text" for="total">Total</label>
+          <input type="text" class="form-control" id="total" name="total" value="R$ 19.90" readonly>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8 mt-md-5">
+      <form>
+        <div class="input-group mb-3">
+          <label class="input-group-text" for="nome">Nome</label>
+          <input type="text" class="form-control" id="nome" name="nome" value="{{assinante.nome}}" readonly>
+        </div>
+
+        <div class="input-group mb-3">
+          <label class="input-group-text" for="email">E-mail</label>
+          <input type="email" class="form-control" id="email" name="email" value="{{ assinante.email }}" readonly>
+        </div>
+
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th scope="col">Serviço</th>
+            <th scope="col">Total</th>
+            <th scope="col">Individual</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>HBO MAX</td>
+            <td>R$ 34.90</td>
+            <td>R$ 12.90</td>
+          </tr>
+          <tr>
+            <td>Netflix</td>
+            <td>R$ 49.90</td>
+            <td>R$ 16.90</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-md-5">
+          <button type="submit" routerLink="/assinantes" class="btn btn-outline-success">Voltar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+
+<ng-template #imagemParam>
+  <img src="{{assinante.imagem}}" class="figure-img img-fluid rounded" alt="{{assinante.imagem}}" height="400" width="400">
+</ng-template>
+
+<ng-template #imagemDefault>
+  <img src="/assets/images/fox.svg" class="figure-img img-fluid rounded" alt="MAX" height="400" width="400">
+</ng-template>

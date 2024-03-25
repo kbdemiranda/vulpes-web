@@ -10,6 +10,7 @@ import { ListarServicosComponent } from './pages/servicos/listar-servicos/listar
 import { CardComponent } from './components/card/card.component';
 import { DetalharServicoComponent } from './pages/servicos/detalhar-servico/detalhar-servico.component';
 import { ListarAssinantesComponent } from './pages/assinantes/listar-assinantes/listar-assinantes.component';
+import { DetalharAssinanteComponent } from './pages/assinantes/detalhar-assinante/detalhar-assinante.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { ListarAssinantesComponent } from './pages/assinantes/listar-assinantes/
     ListarServicosComponent,
     CardComponent,
     DetalharServicoComponent,
-    ListarAssinantesComponent
+    ListarAssinantesComponent,
+    DetalharAssinanteComponent
   ],
     imports: [
         BrowserModule,

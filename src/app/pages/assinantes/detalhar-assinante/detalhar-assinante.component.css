@@ -1,0 +1,51 @@
+.container .total {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.container .total .input-group {
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  width: 50%;
+}
+.container label {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.container figure {
+  width: 100%;
+  display: flex;
+  justify-content: center !important;
+}
+.container figure img {
+  border: #000 1px solid;
+  border-radius: 20px;
+  height: 100px !important;
+  width: 100px !important;
+}
+
+@media (min-width: 1024px) {
+  .container .total {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+  .container .total .input-group {
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    width: 80%;
+  }
+  .container figure img {
+    height: 300px !important;
+    width: 350px !important;
+  }
+  .container button {
+    padding: 1rem 2.5rem;
+  }
+}
+
+/*# sourceMappingURL=detalhar-assinante.component.css.map */

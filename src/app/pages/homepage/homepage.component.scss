@@ -1,0 +1,14 @@
+.container{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5rem;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5rem;
+}
+
+@media (min-width: 768px){
+  .container{
+    justify-content: space-around;
+  }
+}

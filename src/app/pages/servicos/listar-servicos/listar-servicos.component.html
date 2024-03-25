@@ -1,0 +1,10 @@
+<div class="container">
+  <div *ngFor="let servico of servicos">
+    <app-card
+      [path]="'/servico/' + servico.id"
+      [image]="servico.imagem"
+      [alt]="''"
+      [text]="servico.nome"
+    />
+  </div>
+</div>

@@ -9,6 +9,7 @@ import { HomepageComponent } from './pages/homepage/homepage.component';
 import { ListarServicosComponent } from './pages/servicos/listar-servicos/listar-servicos.component';
 import { CardComponent } from './components/card/card.component';
 import { DetalharServicoComponent } from './pages/servicos/detalhar-servico/detalhar-servico.component';
+import { ListarAssinantesComponent } from './pages/assinantes/listar-assinantes/listar-assinantes.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { DetalharServicoComponent } from './pages/servicos/detalhar-servico/deta
     HomepageComponent,
     ListarServicosComponent,
     CardComponent,
-    DetalharServicoComponent
+    DetalharServicoComponent,
+    ListarAssinantesComponent
   ],
     imports: [
         BrowserModule,

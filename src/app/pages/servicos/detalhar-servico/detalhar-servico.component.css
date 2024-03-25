@@ -1,0 +1,27 @@
+.container label {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.container figure {
+  width: 100%;
+  display: flex;
+  justify-content: center !important;
+}
+.container figure img {
+  border: #000 1px solid;
+  border-radius: 20px;
+  height: 300px !important;
+  width: 300px !important;
+}
+
+@media (min-width: 1024px) {
+  .container figure img {
+    height: 400px !important;
+    width: 400px !important;
+  }
+  .container button {
+    padding: 1rem 2.5rem;
+  }
+}
+
+/*# sourceMappingURL=detalhar-servico.component.css.map */

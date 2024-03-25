@@ -1,0 +1,61 @@
+<section class="container">
+  <h2 class="text-center">Detalhar Serviço</h2>
+  <div class="row">
+    <div class="col-md-4 mt-md-5">
+      <figure class="figure justify-content-center align-content-center">
+        <div *ngIf="servico.imagem != ''; then imagemParam; else imagemDefault"></div>
+        <!--      <figcaption class="figure-caption text-end">A caption for the above image.</figcaption>-->
+      </figure>
+    </div>
+    <div class="col-md-8 mt-md-5">
+      <form>
+        <div class="input-group mb-3">
+          <label class="input-group-text" for="nome">Nome</label>
+          <input type="text" class="form-control" id="nome" name="nome" value="{{servico.nome}}" readonly>
+        </div>
+
+        <div class="input-group mb-3">
+          <label class="input-group-text" for="preco">Preço</label>
+          <input type="number" class="form-control" id="preco" name="preco" step="1" value="{{ servico.preco }}" readonly>
+        </div>
+
+        <div class="input-group mb-3">
+          <label class="input-group-text" for="url">URL</label>
+          <input type="text" class="form-control" id="url" name="url" value="{{servico.url}}" readonly>
+        </div>
+
+        <div class="input-group mb-3">
+          <label class="input-group-text" for="tipo_servico">Tipo de Serviço</label>
+          <input type="text" class="form-control" id="tipo_servico" name="tipo_servico" value="{{servico.tipo_servico}}" readonly>
+
+        </div>
+
+        <div class="input-group mb-3">
+          <label class="input-group-text" for="total_vagas">Total de Vagas</label>
+          <input type="number" class="form-control" id="total_vagas" name="total_vagas" value="{{servico.total_vagas}}" readonly>
+        </div>
+
+        <div class="input-group mb-3">
+          <label class="input-group-text" for="vagas_disponiveis">Vagas Disponíveis</label>
+          <input type="number" class="form-control" id="vagas_disponiveis" name="vagas_disponiveis" value="{{servico.vagas_disponiveis}}" readonly>
+        </div>
+        <!--    <div class="input-group mb-3">-->
+        <!--      <label class="input-group-text" for="imagem">Imagem</label>-->
+        <!--      <input type="file" class="form-control" id="imagem" readonly>-->
+        <!--    </div>-->
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-md-5">
+          <button type="submit" routerLink="/servicos" class="btn btn-outline-success">Voltar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+
+<ng-template #imagemParam>
+  <img src="{{servico.imagem}}" class="figure-img img-fluid rounded" alt="{{servico.imagem}}" height="400" width="400">
+</ng-template>
+
+<ng-template #imagemDefault>
+  <img src="/assets/images/fox.svg" class="figure-img img-fluid rounded" alt="MAX" height="400" width="400">
+</ng-template>

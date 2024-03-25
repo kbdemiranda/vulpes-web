@@ -8,6 +8,7 @@ import {NgOptimizedImage} from "@angular/common";
 import { HomepageComponent } from './pages/homepage/homepage.component';
 import { ListarServicosComponent } from './pages/servicos/listar-servicos/listar-servicos.component';
 import { CardComponent } from './components/card/card.component';
+import { DetalharServicoComponent } from './pages/servicos/detalhar-servico/detalhar-servico.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { CardComponent } from './components/card/card.component';
     NavbarComponent,
     HomepageComponent,
     ListarServicosComponent,
-    CardComponent
+    CardComponent,
+    DetalharServicoComponent
   ],
     imports: [
         BrowserModule,

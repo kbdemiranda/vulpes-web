@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .container .total {
   display: flex;
   justify-content: center;
@@ -32,6 +33,16 @@
     justify-content: center;
     align-items: center;
     width: 100%;
+  }
+  .container .total .valor-moeda::before {
+    content: "R$";
+    margin-right: 0.25em; /* Ajuste o espaçamento conforme necessário */
+  }
+  .container .total .valor-moeda {
+    direction: rtl; /* Faz o texto fluir da direita para a esquerda */
+  }
+  .container .total .valor-moeda::placeholder {
+    direction: ltr; /* Mantém o placeholder fluindo da esquerda para a direita */
   }
   .container .total .input-group {
     display: flex;

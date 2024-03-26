@@ -1,29 +1,51 @@
-import { Component } from '@angular/core';
-import {Assinante} from "../../../models/assinante";
+import {Component, OnInit} from '@angular/core';
+import {Assinante, AssinanteDetalhado} from "../../../models/assinante";
+import {AssinanteService} from "../../../services/assinante.service";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-detalhar-assinante',
   templateUrl: './detalhar-assinante.component.html',
   styleUrls: ['./detalhar-assinante.component.scss']
 })
-export class DetalharAssinanteComponent {
-  assinante: Assinante = {
-    id: 1,
-    nome: 'Bruce Wayne',
-    email: 'bruce@wayne.com',
-    servicos: [{
-      id: 1,
-      nome: "Disney+ e Star+",
-      preco: 0.00,
-      url: "https://www.disneyplus.com/",
-      tipo_servico: "STREAMING_VIDEO",
-      total_vagas: 5,
-      vagas_disponiveis: 1,
-      imagem: '/assets/fox.svg',
-      cadastrado_em: "2023-10-11T21:00:00",
-      atualizado_em: "2023-10-17T12:13:48.028599"
-    }],
-    imagem: '/assets/images/user.svg'
-  };
+export class DetalharAssinanteComponent implements OnInit{
+  assinante: AssinanteDetalhado | null = null;
+
+  constructor(
+    private assinanteService: AssinanteService,
+    private route: ActivatedRoute
+  ) {}
+
+  ngOnInit(): void {
+    const id = this.route.snapshot.params['id']; // Pega o ID da URL
+    this.carregarAssinantes(id);
+  }
+
+  carregarAssinante(id: number): void {
+    this.assinanteService.getAssinanteDetalhado(id).subscribe({
+      next: (detalhes) => {
+        this.assinante = detalhes;
+      },
+      error: (erro) => console.error(erro),
+      // complete: () => console.log('Detalhamento do assinante completo')
+    });
+  }
+
+  carregarAssinantes(id: number): void {
+    this.assinanteService.getAssinanteDetalhado(id).subscribe({
+      next: (data) => {
+        // console.log('Dados no componente:', data);
+        this.assinante = data;
+      },
+      error: (erro) => console.error('Erro no componente:', erro),
+    });
+  }
+
+  formatarValor(valor: number): string {
+    return `R$ ${valor.toFixed(2).replace('.', ',')}`;
+  }
+
+
+
 
 }

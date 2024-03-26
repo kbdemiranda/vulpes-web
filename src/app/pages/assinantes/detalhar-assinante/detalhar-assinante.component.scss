@@ -45,6 +45,20 @@
       align-items: center;
       width: 100%;
 
+      .valor-moeda::before {
+        content: 'R$';
+        margin-right: 0.25em; /* Ajuste o espaçamento conforme necessário */
+      }
+
+      .valor-moeda {
+        direction: rtl; /* Faz o texto fluir da direita para a esquerda */
+      }
+
+      .valor-moeda::placeholder {
+        direction: ltr; /* Mantém o placeholder fluindo da esquerda para a direita */
+      }
+
+
       .input-group{
         display: flex;
         justify-content: space-between;

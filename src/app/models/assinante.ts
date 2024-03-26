@@ -7,3 +7,8 @@ export interface Assinante {
   servicos: Servico[];
   imagem: string;
 }
+
+export interface AssinanteDetalhado extends Assinante{
+  plataformas_associadas: Servico[];
+  valor_por_mes: number;
+}

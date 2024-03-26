@@ -6,15 +6,16 @@ import {DetalharServicoComponent} from "./pages/servicos/detalhar-servico/detalh
 import {ListarAssinantesComponent} from "./pages/assinantes/listar-assinantes/listar-assinantes.component";
 import {DetalharAssinanteComponent} from "./pages/assinantes/detalhar-assinante/detalhar-assinante.component";
 import {LoginComponent} from "./pages/login/login.component";
+import {AuthGuard as authGuard} from "./guards/auth.guard";
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: '', component: HomepageComponent },
+  { path: '', component: HomepageComponent, canActivate: [authGuard]},
   { path: 'login', component: LoginComponent },
-  { path: 'servicos', component: ListarServicosComponent },
-  { path: 'servico/:id', component: DetalharServicoComponent },
-  { path: 'assinantes', component: ListarAssinantesComponent },
-  { path: 'assinante/:id', component: DetalharAssinanteComponent },
+  { path: 'servicos', component: ListarServicosComponent, canActivate: [authGuard] },
+  { path: 'servico/:id', component: DetalharServicoComponent, canActivate: [authGuard] },
+  { path: 'assinantes', component: ListarAssinantesComponent, canActivate: [authGuard] },
+  { path: 'assinante/:id', component: DetalharAssinanteComponent, canActivate: [authGuard] },
 ];
 
 @NgModule({

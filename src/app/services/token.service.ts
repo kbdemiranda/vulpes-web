@@ -13,6 +13,10 @@ export class TokenService {
       .setItem(KEY, token);
   }
 
+  isLogged() {
+    return !!localStorage.getItem('token');
+  }
+
   getToken() {
     return localStorage
       .getItem(KEY);

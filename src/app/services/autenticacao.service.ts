@@ -22,7 +22,11 @@ export class AutenticacaoService {
   autenticar(email: string, senha: string): Observable<any> {
     console.log(`${this.apiUrl}/auth/login`);
     return this.http.post(`${this.apiUrl}/auth/login`,
-      {email, senha}, {responseType: 'text'})
+      {email, senha}, {responseType: 'text'}).pipe(
+        tap((token: string) => {
+          this.userSerivce.saveToken(token);
+        }
+    ));
   }
 
   authenticate(email: string, senha: string): Observable<AuthResponse> {

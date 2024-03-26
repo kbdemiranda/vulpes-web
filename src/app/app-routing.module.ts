@@ -5,10 +5,12 @@ import {ListarServicosComponent} from "./pages/servicos/listar-servicos/listar-s
 import {DetalharServicoComponent} from "./pages/servicos/detalhar-servico/detalhar-servico.component";
 import {ListarAssinantesComponent} from "./pages/assinantes/listar-assinantes/listar-assinantes.component";
 import {DetalharAssinanteComponent} from "./pages/assinantes/detalhar-assinante/detalhar-assinante.component";
+import {LoginComponent} from "./pages/login/login.component";
 
 const routes: Routes = [
-  { path: '', redirectTo: 'homepage', pathMatch: 'full' },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '', component: HomepageComponent },
+  { path: 'login', component: LoginComponent },
   { path: 'servicos', component: ListarServicosComponent },
   { path: 'servico/:id', component: DetalharServicoComponent },
   { path: 'assinantes', component: ListarAssinantesComponent },

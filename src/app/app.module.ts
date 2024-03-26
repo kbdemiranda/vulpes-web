@@ -11,6 +11,9 @@ import { CardComponent } from './components/card/card.component';
 import { DetalharServicoComponent } from './pages/servicos/detalhar-servico/detalhar-servico.component';
 import { ListarAssinantesComponent } from './pages/assinantes/listar-assinantes/listar-assinantes.component';
 import { DetalharAssinanteComponent } from './pages/assinantes/detalhar-assinante/detalhar-assinante.component';
+import { LoginComponent } from './pages/login/login.component';
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -21,13 +24,17 @@ import { DetalharAssinanteComponent } from './pages/assinantes/detalhar-assinant
     CardComponent,
     DetalharServicoComponent,
     ListarAssinantesComponent,
-    DetalharAssinanteComponent
+    DetalharAssinanteComponent,
+    LoginComponent
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        NgOptimizedImage
-    ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    NgOptimizedImage,
+    FormsModule,
+    ReactiveFormsModule,
+    HttpClientModule
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })

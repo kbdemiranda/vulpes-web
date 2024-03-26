@@ -13,7 +13,8 @@ import { ListarAssinantesComponent } from './pages/assinantes/listar-assinantes/
 import { DetalharAssinanteComponent } from './pages/assinantes/detalhar-assinante/detalhar-assinante.component';
 import { LoginComponent } from './pages/login/login.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {AutenteicacaoInterceptor} from "./interceptors/autenteicacao.interceptor";
 
 @NgModule({
   declarations: [
@@ -35,7 +36,11 @@ import {HttpClientModule} from "@angular/common/http";
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: AutenteicacaoInterceptor,
+    multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

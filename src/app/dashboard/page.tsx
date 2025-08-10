@@ -8,13 +8,7 @@ import { faUsers, faCloud, faCreditCard } from "@fortawesome/free-solid-svg-icon
 export default function Dashboard() {
   return (
     <Protected>
-      <div
-        className="relative min-h-[72vh]"
-        style={{
-          background:
-            "radial-gradient(1200px 600px at -20% -10%, rgba(120,119,198,0.15), transparent 60%), radial-gradient(1000px 600px at 130% 20%, rgba(16,185,129,0.12), transparent 60%)",
-        }}
-      >
+      <div className="relative min-h-[72vh] bg-app-gradient">
         <main className="pb-10">
           <HeaderBar title="Dashboard" subtitle="Bem‑vindo de volta" />
 

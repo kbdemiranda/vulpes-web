@@ -31,24 +31,40 @@ export default function Sidebar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const { toggle, theme } = useTheme();
+  const isLogin = !!(pathname && pathname.startsWith("/login"));
 
   // Atualiza variáveis CSS para o layout reservar espaço para a sidebar
   useEffect(() => {
     const root = document.documentElement;
+    if (isLogin) {
+      root.style.setProperty("--sidebar-w", "0");
+      root.style.setProperty("--sidebar-offset", "0");
+      return;
+    }
     const w = open ? EXPANDED_W : COLLAPSED_W;
     root.style.setProperty("--sidebar-w", w);
     root.style.setProperty("--sidebar-offset", `calc(${w} + 1rem)`);
     return () => {
       // mantemos os valores atuais ao desmontar
     };
-  }, [open]);
+  }, [open, isLogin]);
 
   // Define valores iniciais ao montar
   useEffect(() => {
     const root = document.documentElement;
+    if (isLogin) {
+      root.style.setProperty("--sidebar-w", "0");
+      root.style.setProperty("--sidebar-offset", "0");
+      return;
+    }
     root.style.setProperty("--sidebar-w", COLLAPSED_W);
     root.style.setProperty("--sidebar-offset", `calc(${COLLAPSED_W} + 1rem)`);
-  }, []);
+  }, [isLogin]);
+
+  // Renderização condicional após os hooks, para manter a ordem dos hooks estável
+  if (isLogin) {
+    return null;
+  }
 
   const topItems: Item[] = [
     { icon: faHouse, label: "Início", href: "/dashboard" },

@@ -1,5 +1,5 @@
 import { API_BASE } from "@/lib/config";
-import { getToken, clearToken } from "@/lib/auth";
+import { getToken, clearToken, UNAUTHORIZED_EVENT } from "@/lib/auth";
 
 export async function apiFetch<T>(path: string, init: RequestInit = {}): Promise<T> {
   const token = typeof window !== "undefined" ? getToken() : null;
@@ -18,6 +18,9 @@ export async function apiFetch<T>(path: string, init: RequestInit = {}): Promise
   if (res.status === 401) {
     // Unauthorized: clear token so UI can redirect to login
     clearToken();
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent(UNAUTHORIZED_EVENT));
+    }
   }
 
   if (!res.ok) {

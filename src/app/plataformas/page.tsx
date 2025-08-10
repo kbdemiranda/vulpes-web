@@ -55,15 +55,20 @@ export default function PlataformasPage() {
           </div>
         </div>
         {error && <p className="mb-2 text-sm text-red-400">{error}</p>}
-        <PlatformsTable data={data} onView={(id) => router.push(`/plataformas/${id}`)} onEdit={(id) => router.push(`/plataformas/${id}/editar`)} onDelete={async (id) => {
-          if (!confirm("Confirmar exclusão?")) return;
-          try {
-            await Api.deletePlataforma(id);
-            await fetchData();
-          } catch (e: any) {
-            alert(e?.message || "Erro ao excluir plataforma");
-          }
-        }} />
+        <PlatformsCards
+          data={data}
+          onView={(id) => router.push(`/plataformas/${id}`)}
+          onEdit={(id) => router.push(`/plataformas/${id}/editar`)}
+          onDelete={async (id) => {
+            if (!confirm("Confirmar exclusão?")) return;
+            try {
+              await Api.deletePlataforma(id);
+              await fetchData();
+            } catch (e: any) {
+              alert(e?.message || "Erro ao excluir plataforma");
+            }
+          }}
+        />
 
         {/* Floating create button */}
         <button
@@ -99,57 +104,195 @@ function toArray(input: any): Row[] {
   return [];
 }
 
-function PlatformsTable({ data, onView, onEdit, onDelete }: { data: any; onView: (id: number) => void; onEdit: (id: number) => void; onDelete: (id: number) => void }) {
+function PlatformsCards({
+  data,
+  onView,
+  onEdit,
+  onDelete,
+}: {
+  data: any;
+  onView: (id: number) => void;
+  onEdit: (id: number) => void;
+  onDelete: (id: number) => void;
+}) {
   const rows = useMemo(() => toArray(data), [data]);
-  const fmtCurrency = (n?: number) => (typeof n === "number" ? new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(n) : undefined);
+
+  const fmtCurrency = (n?: number) => {
+    if (typeof n !== "number" || Number.isNaN(n)) return "-";
+    try {
+      return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(n);
+    } catch {
+      return String(n);
+    }
+  };
+
+  const getInitials = (name?: string) => {
+    if (!name) return "P";
+    const parts = name.trim().split(/\s+/);
+    const first = parts[0]?.[0] ?? "";
+    const last = parts.length > 1 ? parts[parts.length - 1]?.[0] ?? "" : "";
+    return (first + last).toUpperCase() || "P";
+  };
 
   return (
-    <div className="overflow-auto">
-      <table className="w-full text-left text-sm">
-        <thead>
-          <tr className="border-b" style={{ borderColor: "var(--border)" }}>
-            <th className="px-2 py-2">ID</th>
-            <th className="px-2 py-2">Nome</th>
-            <th className="px-2 py-2">Tipo</th>
-            <th className="px-2 py-2">Preço</th>
-            <th className="px-2 py-2">Total de vagas</th>
-            <th className="px-2 py-2">Vagas disp.</th>
-            <th className="px-2 py-2">Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((r) => (
-            <tr key={r.id} className="border-b last:border-0" style={{ borderColor: "var(--border)" }}>
-              <td className="px-2 py-2">{r.id}</td>
-              <td className="px-2 py-2">{r.nome}</td>
-              <td className="px-2 py-2">{tipoServicoToLabel(r.tipo_servico) ?? "-"}</td>
-              <td className="px-2 py-2">{fmtCurrency(typeof r.preco === "number" ? r.preco : Number(r.preco))}</td>
-              <td className="px-2 py-2">{r.total_vagas}</td>
-              <td className="px-2 py-2">{r.vagas_disponiveis ?? "-"}</td>
-              <td className="px-2 py-2">
-                <div className="flex items-center gap-2">
-                  <button className="rounded border px-2 py-1" style={{ borderColor: "var(--border)" }} title="Ver" onClick={() => onView(r.id)}>
+    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+      {rows.map((r) => {
+        const precoNumber = typeof r.preco === "number" ? r.preco : Number(r.preco);
+        const vagasInfo = `${r.vagas_disponiveis ?? "-"} / ${r.total_vagas ?? "-"}`;
+        const tipoLabel = tipoServicoToLabel(r.tipo_servico) ?? "-";
+
+        return (
+          <section
+            key={r.id}
+            className={[
+              "group relative rounded-2xl border p-5 transition-all",
+              "shadow-[inset_0_0_0_1px_rgba(255,255,255,0.02)] hover:shadow-xl",
+              "backdrop-blur-sm",
+            ].join(" ")}
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.0))",
+              borderColor: "var(--border)",
+            }}
+          >
+            <div
+              className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+              style={{
+                background:
+                  "radial-gradient(600px 200px at 0% 0%, rgba(139,92,246,0.08), transparent 60%)",
+              }}
+            />
+
+            <div className="relative z-10">
+              <div className="mb-4 flex items-start justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <span
+                    className={[
+                      "inline-flex h-12 w-12 items-center justify-center rounded-xl text-white shadow-lg",
+                      "bg-gradient-to-br from-sky-500 to-cyan-600",
+                    ].join(" ")}
+                    aria-hidden
+                  >
+                    <span className="text-base font-semibold">{getInitials(r.nome)}</span>
+                  </span>
+                  <div>
+                    <h3 className="text-lg font-semibold" style={{ color: "var(--fg)" }}>
+                      {r.nome || "Sem nome"}
+                    </h3>
+                    <p className="text-sm" style={{ color: "var(--muted)" }}>
+                      {tipoLabel}
+                    </p>
+                    <p className="mt-1 text-xs" style={{ color: "var(--muted)" }}>
+                      ID #{r.id}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="hidden gap-1 sm:flex">
+                  <button
+                    className="rounded border p-2"
+                    style={{ borderColor: "var(--border)" }}
+                    title="Ver"
+                    onClick={() => onView(r.id)}
+                    aria-label={`Ver plataforma ${r.nome ?? r.id}`}
+                  >
                     <FontAwesomeIcon icon={faEye} />
                   </button>
-                  <button className="rounded border px-2 py-1" style={{ borderColor: "var(--border)" }} title="Editar" onClick={() => onEdit(r.id)}>
+                  <button
+                    className="rounded border p-2"
+                    style={{ borderColor: "var(--border)" }}
+                    title="Editar"
+                    onClick={() => onEdit(r.id)}
+                    aria-label={`Editar plataforma ${r.nome ?? r.id}`}
+                  >
                     <FontAwesomeIcon icon={faPenToSquare} />
                   </button>
-                  <button className="rounded border px-2 py-1 text-red-400" style={{ borderColor: "var(--border)" }} title="Excluir" onClick={() => onDelete(r.id)}>
+                  <button
+                    className="rounded border p-2 text-red-400"
+                    style={{ borderColor: "var(--border)" }}
+                    title="Excluir"
+                    onClick={() => onDelete(r.id)}
+                    aria-label={`Excluir plataforma ${r.nome ?? r.id}`}
+                  >
                     <FontAwesomeIcon icon={faTrash} />
                   </button>
                 </div>
-              </td>
-            </tr>
-          ))}
-          {rows.length === 0 && (
-            <tr>
-              <td className="px-2 py-4 text-center" colSpan={7}>
-                Nenhum resultado
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+              </div>
+
+              <div className="mt-2 grid grid-cols-2 gap-4">
+                <div>
+                  <div className="text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
+                    Preço
+                  </div>
+                  <div className="mt-1 text-2xl font-bold" style={{ color: "var(--fg)" }}>
+                    {fmtCurrency(precoNumber)}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
+                    Vagas
+                  </div>
+                  <div className="mt-1 text-lg font-semibold" style={{ color: "var(--fg)" }}>
+                    {vagasInfo}
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-3 flex flex-wrap gap-2">
+                <span
+                  className="rounded border px-2 py-1 text-xs"
+                  style={{ borderColor: "var(--border)", color: "var(--muted)" }}
+                >
+                  {tipoLabel}
+                </span>
+                {typeof r.total_vagas === "number" && (
+                  <span
+                    className="rounded border px-2 py-1 text-xs"
+                    style={{ borderColor: "var(--border)", color: "var(--muted)" }}
+                  >
+                    Total: {r.total_vagas}
+                  </span>
+                )}
+              </div>
+
+              <div className="mt-4 flex items-center gap-2 sm:hidden">
+                <button
+                  className="rounded border px-3 py-2"
+                  style={{ borderColor: "var(--border)" }}
+                  title="Ver"
+                  onClick={() => onView(r.id)}
+                >
+                  <FontAwesomeIcon icon={faEye} />
+                </button>
+                <button
+                  className="rounded border px-3 py-2"
+                  style={{ borderColor: "var(--border)" }}
+                  title="Editar"
+                  onClick={() => onEdit(r.id)}
+                >
+                  <FontAwesomeIcon icon={faPenToSquare} />
+                </button>
+                <button
+                  className="rounded border px-3 py-2 text-red-400"
+                  style={{ borderColor: "var(--border)" }}
+                  title="Excluir"
+                  onClick={() => onDelete(r.id)}
+                >
+                  <FontAwesomeIcon icon={faTrash} />
+                </button>
+              </div>
+            </div>
+          </section>
+        );
+      })}
+      {rows.length === 0 && (
+        <div
+          className="col-span-full rounded border p-6 text-center text-sm"
+          style={{ borderColor: "var(--border)" }}
+        >
+          Nenhum resultado
+        </div>
+      )}
     </div>
   );
 }

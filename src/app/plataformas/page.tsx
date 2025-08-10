@@ -5,7 +5,7 @@ import { Api } from "@/lib/api";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faPenToSquare, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faPenToSquare, faTrash, faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { tipoServicoToLabel, TIPO_SERVICO_OPTIONS } from "@/lib/tipoServico";
 import type { TipoServico } from "@/lib/tipoServico";
 
@@ -328,50 +328,113 @@ function CreatePlataformaModal({ onClose, onCreated }: { onClose: () => void; on
 
   return (
     <div className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4">
-      <div className="theme-transition w-full max-w-md rounded-lg border p-5" style={{ borderColor: "var(--border)", background: "var(--surface)" }}>
-        <div className="mb-4 flex items-center justify-between">
-          <h3 className="text-lg font-semibold">Nova Plataforma</h3>
-          <button onClick={onClose} className="rounded px-2 py-1" style={{ background: "var(--bg)" }}>Fechar</button>
-        </div>
-        <form onSubmit={submit} className="space-y-3">
-          <div>
-            <label className="mb-1 block text-sm" style={{ color: "var(--muted)" }}>Nome</label>
-            <input required value={nome} onChange={(e) => setNome(e.target.value)} className="w-full rounded border border-[var(--border)] bg-[var(--input)] p-2" />
-          </div>
-          <div>
-            <label className="mb-1 block text-sm" style={{ color: "var(--muted)" }}>Preço</label>
-            <input required type="number" step="0.01" value={preco} onChange={(e) => setPreco(e.target.value === "" ? "" : parseFloat(e.target.value))} className="w-full rounded border border-[var(--border)] bg-[var(--input)] p-2" />
-          </div>
-          <div>
-            <label className="mb-1 block text-sm" style={{ color: "var(--muted)" }}>Tipo de serviço</label>
-            <select
-              className="w-full rounded border border-[var(--border)] bg-[var(--input)] p-2"
-              value={tipo}
-              onChange={(e) => setTipo(e.target.value as TipoServico)}
-              required
+      <section
+        className={[
+          "group relative w-full max-w-md rounded-2xl border p-5 transition-all",
+          "shadow-[inset_0_0_0_1px_rgba(255,255,255,0.02)]",
+          "backdrop-blur-sm",
+        ].join(" ")}
+        style={{
+          borderColor: "var(--border)",
+          background: "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.0))",
+        }}
+      >
+        <div
+          className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          style={{
+            background:
+              "radial-gradient(600px 200px at 0% 0%, rgba(139,92,246,0.08), transparent 60%)",
+          }}
+        />
+        <div className="relative z-10">
+          <div className="mb-4 flex items-center justify-between">
+            <h3 className="text-lg font-semibold" style={{ color: "var(--fg)" }}>Nova Plataforma</h3>
+            <button
+              onClick={onClose}
+              className="rounded-md border p-2"
+              style={{ borderColor: "var(--border)", background: "var(--bg)" }}
+              aria-label="Fechar"
+              title="Fechar"
             >
-              {TIPO_SERVICO_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
+              <FontAwesomeIcon icon={faXmark} />
+            </button>
           </div>
-          <div>
-            <label className="mb-1 block text-sm" style={{ color: "var(--muted)" }}>Total de vagas</label>
-            <input required type="number" value={totalVagas} onChange={(e) => setTotalVagas(e.target.value === "" ? "" : parseInt(e.target.value, 10))} className="w-full rounded border border-[var(--border)] bg-[var(--input)] p-2" />
-          </div>
-          <div>
-            <label className="mb-1 block text-sm" style={{ color: "var(--muted)" }}>URL (opcional)</label>
-            <input value={url} onChange={(e) => setUrl(e.target.value)} className="w-full rounded border border-[var(--border)] bg-[var(--input)] p-2" />
-          </div>
-          {error && <p className="text-sm text-red-400">{error}</p>}
-          <div className="flex justify-end gap-2">
-            <button type="button" onClick={onClose} className="rounded border px-3 py-2" style={{ borderColor: "var(--border)" }}>Cancelar</button>
-            <button disabled={loading} className="rounded px-3 py-2" style={{ background: "var(--primary)", color: "var(--fg)" }}>{loading ? "Salvando..." : "Salvar"}</button>
-          </div>
-        </form>
-      </div>
+
+          <form onSubmit={submit} className="space-y-4">
+            <div>
+              <label className="mb-1 block text-sm" style={{ color: "var(--muted)" }}>Nome</label>
+              <input
+                required
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
+                className="w-full rounded-md border border-[var(--border)] bg-[var(--input)] p-3 outline-none transition focus:ring-2 focus:ring-[var(--primary)]/30"
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-sm" style={{ color: "var(--muted)" }}>Preço</label>
+              <input
+                required
+                type="number"
+                step="0.01"
+                value={preco}
+                onChange={(e) => setPreco(e.target.value === "" ? "" : parseFloat(e.target.value))}
+                className="w-full rounded-md border border-[var(--border)] bg-[var(--input)] p-3 outline-none transition focus:ring-2 focus:ring-[var(--primary)]/30"
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-sm" style={{ color: "var(--muted)" }}>Tipo de serviço</label>
+              <select
+                className="w-full rounded-md border border-[var(--border)] bg-[var(--input)] p-3 outline-none transition focus:ring-2 focus:ring-[var(--primary)]/30"
+                value={tipo}
+                onChange={(e) => setTipo(e.target.value as TipoServico)}
+                required
+              >
+                {TIPO_SERVICO_OPTIONS.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="mb-1 block text-sm" style={{ color: "var(--muted)" }}>Total de vagas</label>
+              <input
+                required
+                type="number"
+                value={totalVagas}
+                onChange={(e) => setTotalVagas(e.target.value === "" ? "" : parseInt(e.target.value, 10))}
+                className="w-full rounded-md border border-[var(--border)] bg-[var(--input)] p-3 outline-none transition focus:ring-2 focus:ring-[var(--primary)]/30"
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-sm" style={{ color: "var(--muted)" }}>URL (opcional)</label>
+              <input
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+                className="w-full rounded-md border border-[var(--border)] bg-[var(--input)] p-3 outline-none transition focus:ring-2 focus:ring-[var(--primary)]/30"
+              />
+            </div>
+            {error && <p className="text-sm text-red-400">{error}</p>}
+            <div className="mt-2 flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={onClose}
+                className="rounded-md border px-4 py-2"
+                style={{ borderColor: "var(--border)", background: "var(--bg)" }}
+              >
+                Cancelar
+              </button>
+              <button
+                disabled={loading}
+                className="rounded-md px-4 py-2"
+                style={{ background: "var(--primary)", color: "var(--fg)" }}
+              >
+                {loading ? "Salvando..." : "Salvar"}
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
     </div>
   );
 }

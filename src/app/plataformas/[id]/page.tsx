@@ -6,7 +6,7 @@ import React, { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { tipoServicoToLabel } from "@/lib/tipoServico";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faPenToSquare, faRotateRight, faCloud } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faRotateRight, faCloud } from "@fortawesome/free-solid-svg-icons";
 
 export default function PlataformaDetalhe({ params }: { params: Promise<{ id: string }> }) {
   const { id: idParam } = use(params);
@@ -64,15 +64,6 @@ export default function PlataformaDetalhe({ params }: { params: Promise<{ id: st
                 title="Voltar"
               >
                 <FontAwesomeIcon icon={faArrowLeft} />
-              </Link>
-              <Link
-                href={`/plataformas/${id}/editar`}
-                className="rounded-md border p-2"
-                style={{ borderColor: "var(--border)", background: "var(--bg)" }}
-                aria-label="Editar"
-                title="Editar"
-              >
-                <FontAwesomeIcon icon={faPenToSquare} />
               </Link>
               <button
                 onClick={fetchData}

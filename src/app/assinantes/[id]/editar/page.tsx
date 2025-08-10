@@ -5,6 +5,8 @@ import { Api } from "@/lib/api";
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 export default function EditarAssinantePage({ params }: { params: Promise<{ id: string }> }) {
   const { id: idParam } = use(params);
@@ -58,70 +60,94 @@ export default function EditarAssinantePage({ params }: { params: Promise<{ id: 
 
   return (
     <Protected>
-      <h1 className="mb-4 text-2xl font-semibold" style={{ color: "var(--primary)" }}>
-        Editar Assinante
-      </h1>
-      <section className="theme-transition rounded-lg border p-4" style={{ borderColor: "var(--border)", background: "var(--surface)" }}>
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-semibold">Formulário</h2>
-          <div className="flex items-center gap-2">
-            <Link href={`/assinantes/${id}`} className="rounded-md border px-3 py-2 text-sm" style={{ borderColor: "var(--border)", background: "var(--bg)" }}>
-              Voltar
-            </Link>
-          </div>
-        </div>
-
-        {error && <p className="mb-2 text-sm text-red-400">{error}</p>}
-
-        {loadingData ? (
-          <p className="text-sm opacity-80">Carregando...</p>
-        ) : (
-          <form onSubmit={onSubmit} className="grid gap-4">
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <div>
-                <label className="mb-1 block text-sm" style={{ color: "var(--muted)" }}>
-                  Nome
-                </label>
-                <input
-                  required
-                  value={nome}
-                  onChange={(e) => setNome(e.target.value)}
-                  className="w-full rounded border border-[var(--border)] bg-[var(--input)] p-2"
-                />
-              </div>
-              <div>
-                <label className="mb-1 block text-sm" style={{ color: "var(--muted)" }}>
-                  Email
-                </label>
-                <input
-                  required
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full rounded border border-[var(--border)] bg-[var(--input)] p-2"
-                />
-              </div>
-            </div>
-
-            <div className="flex justify-end gap-2">
+      <div className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4">
+        <section
+          className={[
+            "group relative w-full max-w-2xl rounded-2xl border p-5 transition-all",
+            "shadow-[inset_0_0_0_1px_rgba(255,255,255,0.02)]",
+            "backdrop-blur-sm",
+          ].join(" ")}
+          style={{
+            borderColor: "var(--border)",
+            background: "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.0))",
+          }}
+        >
+          <div
+            className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+            style={{
+              background:
+                "radial-gradient(600px 200px at 0% 0%, rgba(139,92,246,0.08), transparent 60%)",
+            }}
+          />
+          <div className="relative z-10">
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="text-lg font-semibold" style={{ color: "var(--fg)" }}>
+                Editar Assinante
+              </h3>
               <Link
                 href={`/assinantes/${id}`}
-                className="rounded border px-3 py-2"
-                style={{ borderColor: "var(--border)" }}
+                className="rounded-md border p-2"
+                style={{ borderColor: "var(--border)", background: "var(--bg)" }}
+                aria-label="Fechar"
+                title="Fechar"
               >
-                Cancelar
+                <FontAwesomeIcon icon={faXmark} />
               </Link>
-              <button
-                disabled={loading}
-                className="rounded px-3 py-2"
-                style={{ background: "var(--primary)", color: "var(--fg)" }}
-              >
-                {loading ? "Salvando..." : "Salvar alterações"}
-              </button>
             </div>
-          </form>
-        )}
-      </section>
+
+            {error && <p className="mb-2 text-sm text-red-400">{error}</p>}
+
+            {loadingData ? (
+              <p className="text-sm opacity-80">Carregando...</p>
+            ) : (
+              <form onSubmit={onSubmit} className="grid gap-5">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <div>
+                    <label className="mb-1 block text-sm" style={{ color: "var(--muted)" }}>
+                      Nome
+                    </label>
+                    <input
+                      required
+                      value={nome}
+                      onChange={(e) => setNome(e.target.value)}
+                      className="w-full rounded-md border border-[var(--border)] bg-[var(--input)] p-3 outline-none transition focus:ring-2 focus:ring-[var(--primary)]/30"
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-1 block text-sm" style={{ color: "var(--muted)" }}>
+                      Email
+                    </label>
+                    <input
+                      required
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full rounded-md border border-[var(--border)] bg-[var(--input)] p-3 outline-none transition focus:ring-2 focus:ring-[var(--primary)]/30"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex justify-end gap-2">
+                  <Link
+                    href={`/assinantes/${id}`}
+                    className="rounded-md border px-4 py-2"
+                    style={{ borderColor: "var(--border)", background: "var(--bg)" }}
+                  >
+                    Cancelar
+                  </Link>
+                  <button
+                    disabled={loading}
+                    className="rounded-md px-4 py-2"
+                    style={{ background: "var(--primary)", color: "var(--fg)" }}
+                  >
+                    {loading ? "Salvando..." : "Salvar alterações"}
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+        </section>
+      </div>
     </Protected>
   );
 }

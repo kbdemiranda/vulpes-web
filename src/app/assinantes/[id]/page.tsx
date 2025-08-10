@@ -6,7 +6,7 @@ import React from "react";
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faArrowLeft, faPenToSquare, faRotateRight } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faArrowLeft, faRotateRight } from "@fortawesome/free-solid-svg-icons";
 
 export default function AssinanteDetalhe({ params }: { params: Promise<{ id: string }> }) {
   const { id: idParam } = React.use(params);
@@ -64,15 +64,6 @@ export default function AssinanteDetalhe({ params }: { params: Promise<{ id: str
                 title="Voltar"
               >
                 <FontAwesomeIcon icon={faArrowLeft} />
-              </Link>
-              <Link
-                href={`/assinantes/${id}/editar`}
-                className="rounded-md border p-2"
-                style={{ borderColor: "var(--border)", background: "var(--bg)" }}
-                aria-label="Editar"
-                title="Editar"
-              >
-                <FontAwesomeIcon icon={faPenToSquare} />
               </Link>
               <button
                 onClick={fetchData}

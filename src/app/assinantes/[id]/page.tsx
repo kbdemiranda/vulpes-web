@@ -2,13 +2,15 @@
 
 import Protected from "@/components/Protected";
 import { Api } from "@/lib/api";
+import React from "react";
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 
-export default function AssinanteDetalhe({ params }: { params: { id: string } }) {
-  const id = Number(params.id);
+export default function AssinanteDetalhe({ params }: { params: Promise<{ id: string }> }) {
+  const { id: idParam } = React.use(params);
+  const id = Number(idParam);
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -30,7 +32,7 @@ export default function AssinanteDetalhe({ params }: { params: { id: string } })
 
   return (
     <Protected>
-      <h1 className="mb-4 text-2xl font-semibold" style={{ color: "var(--primary)" }}>Assinante #{id}</h1>
+      <h1 className="mb-4 text-2xl font-semibold" style={{ color: "var(--primary)" }}>{(data?.nome ?? data?.name ?? data?.Nome) || `Assinante #${id}`}</h1>
       <section className="theme-transition rounded-lg border p-4" style={{ borderColor: "var(--border)", background: "var(--surface)" }}>
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-lg font-semibold">Perfil</h2>

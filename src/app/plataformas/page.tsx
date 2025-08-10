@@ -101,6 +101,8 @@ function toArray(input: any): Row[] {
 
 function PlatformsTable({ data, onView, onEdit, onDelete }: { data: any; onView: (id: number) => void; onEdit: (id: number) => void; onDelete: (id: number) => void }) {
   const rows = useMemo(() => toArray(data), [data]);
+  const fmtCurrency = (n?: number) => (typeof n === "number" ? new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(n) : undefined);
+
   return (
     <div className="overflow-auto">
       <table className="w-full text-left text-sm">
@@ -121,7 +123,7 @@ function PlatformsTable({ data, onView, onEdit, onDelete }: { data: any; onView:
               <td className="px-2 py-2">{r.id}</td>
               <td className="px-2 py-2">{r.nome}</td>
               <td className="px-2 py-2">{tipoServicoToLabel(r.tipo_servico) ?? "-"}</td>
-              <td className="px-2 py-2">{r.preco}</td>
+              <td className="px-2 py-2">{fmtCurrency(typeof r.preco === "number" ? r.preco : Number(r.preco))}</td>
               <td className="px-2 py-2">{r.total_vagas}</td>
               <td className="px-2 py-2">{r.vagas_disponiveis ?? "-"}</td>
               <td className="px-2 py-2">

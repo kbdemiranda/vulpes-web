@@ -42,7 +42,7 @@ export default function Dashboard() {
                     Visão geral
                   </h3>
                   <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>
-                    Suas métricas em um só lugar.
+                    Suas métricas em um só lugar (EM BREVE).
                   </p>
                   <div className="mt-6 grid grid-cols-2 gap-4">
                     <MiniStat label="Assinantes" value="—" />
@@ -70,7 +70,9 @@ function HeaderBar({ title, subtitle }: { title: string; subtitle?: string }) {
     <header className="mb-6 flex items-center justify-between">
       <div>
         <h1 className="text-2xl font-semibold tracking-tight" style={{ color: "var(--primary)" }}>
-          {title}
+          <span className="inline-flex items-center gap-2">
+            <span>{title}</span>
+          </span>
         </h1>
         {subtitle && (
           <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>

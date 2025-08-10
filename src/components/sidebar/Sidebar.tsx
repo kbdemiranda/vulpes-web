@@ -103,7 +103,7 @@ export default function Sidebar() {
           <FontAwesomeIcon icon={faBars} style={{ color: "var(--fg)" }} />
           {open && (
             <span className="ml-2 text-xs font-medium" style={{ color: "var(--muted)" }}>
-              Fechar
+              <img src="/logo.svg" alt="Logo" className="h-6"/>
             </span>
           )}
         </button>

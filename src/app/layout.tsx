@@ -7,6 +7,7 @@ import Sidebar from "@/components/sidebar/Sidebar";
 export const metadata = {
   title: "Vulpes",
   description: "Vulpes Web UI",
+  icons: { icon: "/fox.svg" },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

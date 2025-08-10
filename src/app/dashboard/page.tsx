@@ -27,13 +27,13 @@ export default function Dashboard() {
               icon={<FontAwesomeIcon icon={faCloud} className="text-white/90" />}
               bubbleGradient="from-sky-500 to-cyan-500"
             />
-            <QuickLinkCard
-              className="col-span-12 sm:col-span-4"
-              href="/pagamentos"
-              label="Pagamentos"
-              icon={<FontAwesomeIcon icon={faCreditCard} className="text-white/90" />}
-              bubbleGradient="from-amber-500 to-orange-500"
-            />
+            {/*<QuickLinkCard*/}
+            {/*  className="col-span-12 sm:col-span-4"*/}
+            {/*  href="/pagamentos"*/}
+            {/*  label="Pagamentos"*/}
+            {/*  icon={<FontAwesomeIcon icon={faCreditCard} className="text-white/90" />}*/}
+            {/*  bubbleGradient="from-amber-500 to-orange-500"*/}
+            {/*/>*/}
 
             <WidgetCard className="col-span-12 md:col-span-8 h-48 md:h-56">
               <div className="flex h-full items-center justify-between">

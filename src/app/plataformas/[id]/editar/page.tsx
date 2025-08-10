@@ -105,7 +105,7 @@ export default function EditarPlataformaPage({ params }: { params: Promise<{ id:
 
   return (
     <Protected>
-      <div className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4" onClick={closeModal}>
+      <div className="fixed inset-0 z-50 grid place-items-center p-4" style={{ background: "var(--overlay)" }} onClick={closeModal}>
         <section
           onClick={(e) => e.stopPropagation()}
           className={[
@@ -115,7 +115,7 @@ export default function EditarPlataformaPage({ params }: { params: Promise<{ id:
           ].join(" ")}
           style={{
             borderColor: "var(--border)",
-            background: "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.0))",
+            background: "var(--surface)",
           }}
         >
           <div
@@ -232,7 +232,7 @@ export default function EditarPlataformaPage({ params }: { params: Promise<{ id:
                   <button
                     disabled={loading}
                     className="rounded-md px-4 py-2"
-                    style={{ background: "var(--primary)", color: "var(--fg)" }}
+                    style={{ background: "var(--primary)", color: "#ffffff" }}
                   >
                     {loading ? "Salvando..." : "Salvar alterações"}
                   </button>

@@ -11,9 +11,11 @@ import {
   faWallet,
   faUser,
   faRightFromBracket,
+  faCircleHalfStroke,
 } from "@fortawesome/free-solid-svg-icons";
 import { Api } from "@/lib/api";
 import { clearToken } from "@/lib/auth";
+import { useTheme } from "@/components/ThemeProvider";
 
 type Item = {
   icon: any;
@@ -28,6 +30,7 @@ export default function Sidebar() {
   const router = useRouter();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const { toggle, theme } = useTheme();
 
   // Atualiza variáveis CSS para o layout reservar espaço para a sidebar
   useEffect(() => {
@@ -51,7 +54,7 @@ export default function Sidebar() {
     { icon: faHouse, label: "Início", href: "/dashboard" },
     { icon: faUsers, label: "Assinantes", href: "/assinantes" },
     { icon: faLayerGroup, label: "Plataformas", href: "/plataformas" },
-    { icon: faWallet, label: "Pagamentos", href: "/pagamentos" },
+    // { icon: faWallet, label: "Pagamentos", href: "/pagamentos" },
   ];
 
   const bottomItems: Item[] = [
@@ -152,6 +155,30 @@ export default function Sidebar() {
 
       {/* Ações inferiores */}
       <div className="mt-auto flex flex-col gap-2">
+        <button
+          onClick={toggle}
+          className={[
+            "group relative flex items-center rounded-xl border transition-all",
+            open ? "h-10 px-3 justify-start gap-3" : "h-10 w-10 justify-center",
+          ].join(" ")}
+          style={{
+            background: "var(--bg)",
+            borderColor: "var(--border)",
+          }}
+          title={theme === "dark" ? "Alternar para claro" : "Alternar para escuro"}
+          aria-label="Alternar tema"
+          type="button"
+        >
+          <FontAwesomeIcon
+            icon={faCircleHalfStroke}
+            style={{ color: "var(--fg)" }}
+          />
+          {open && (
+            <span className="whitespace-nowrap text-sm" style={{ color: "var(--fg)" }}>
+              Tema
+            </span>
+          )}
+        </button>
         {bottomItems.map((it) => {
           const active = isActive(it.href);
           return (

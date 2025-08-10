@@ -16,6 +16,8 @@
   --muted: #d1d5db;   /* secondary text */
   /* App gradient (dark) */
   --app-gradient: radial-gradient(1200px 600px at -20% -10%, rgba(120,119,198,0.15), transparent 60%), radial-gradient(1000px 600px at 130% 20%, rgba(16,185,129,0.12), transparent 60%);
+  /* Modal overlay */
+  --overlay: rgba(0, 0, 0, 0.55);
 }
 
 /* Light theme */
@@ -28,6 +30,8 @@
   --muted: #374151;   /* secondary text */
   /* App gradient (light) - mais suave para não poluir */
   --app-gradient: radial-gradient(1200px 600px at -20% -10%, rgba(120,119,198,0.10), transparent 60%), radial-gradient(1000px 600px at 130% 20%, rgba(16,185,129,0.08), transparent 60%);
+  /* Modal overlay */
+  --overlay: rgba(0, 0, 0, 0.35);
 }
 
 html, body { height: 100%; }

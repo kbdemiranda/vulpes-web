@@ -2,7 +2,7 @@
 
 import Protected from "@/components/Protected";
 import { Api } from "@/lib/api";
-import { use, useEffect, useState } from "react";
+import { use, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,6 +15,9 @@ export default function EditarAssinantePage({ params }: { params: Promise<{ id: 
 
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
+
+  const [initialNome, setInitialNome] = useState("");
+  const [initialEmail, setInitialEmail] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [loadingData, setLoadingData] = useState(true);
@@ -29,6 +32,8 @@ export default function EditarAssinantePage({ params }: { params: Promise<{ id: 
         if (!isMounted) return;
         setNome(a?.nome ?? a?.name ?? "");
         setEmail(a?.email ?? a?.Email ?? "");
+        setInitialNome(a?.nome ?? a?.name ?? "");
+        setInitialEmail(a?.email ?? a?.Email ?? "");
       } catch (e: any) {
         setError(e?.message || "Erro ao carregar assinante");
       } finally {
@@ -39,6 +44,19 @@ export default function EditarAssinantePage({ params }: { params: Promise<{ id: 
       isMounted = false;
     };
   }, [id]);
+
+  const isDirty = useMemo(
+    () => nome !== initialNome || email !== initialEmail,
+    [nome, email, initialNome, initialEmail]
+  );
+
+  const closeModal = () => {
+    if (isDirty) {
+      const ok = confirm("Existem alterações não salvas. Deseja sair sem salvar?");
+      if (!ok) return;
+    }
+    router.push(`/assinantes`);
+  };
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,8 +78,9 @@ export default function EditarAssinantePage({ params }: { params: Promise<{ id: 
 
   return (
     <Protected>
-      <div className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4">
+      <div className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4" onClick={closeModal}>
         <section
+          onClick={(e) => e.stopPropagation()}
           className={[
             "group relative w-full max-w-2xl rounded-2xl border p-5 transition-all",
             "shadow-[inset_0_0_0_1px_rgba(255,255,255,0.02)]",
@@ -90,6 +109,10 @@ export default function EditarAssinantePage({ params }: { params: Promise<{ id: 
                 style={{ borderColor: "var(--border)", background: "var(--bg)" }}
                 aria-label="Fechar"
                 title="Fechar"
+                onClick={(e) => {
+                  e.preventDefault();
+                  closeModal();
+                }}
               >
                 <FontAwesomeIcon icon={faXmark} />
               </Link>
@@ -132,6 +155,10 @@ export default function EditarAssinantePage({ params }: { params: Promise<{ id: 
                     href={`/assinantes/${id}`}
                     className="rounded-md border px-4 py-2"
                     style={{ borderColor: "var(--border)", background: "var(--bg)" }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      closeModal();
+                    }}
                   >
                     Cancelar
                   </Link>

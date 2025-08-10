@@ -2,7 +2,7 @@
 
 import Protected from "@/components/Protected";
 import { Api } from "@/lib/api";
-import { use, useEffect, useState } from "react";
+import {use, useEffect, useMemo, useState} from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { TIPO_SERVICO_OPTIONS } from "@/lib/tipoServico";
@@ -21,6 +21,12 @@ export default function EditarPlataformaPage({ params }: { params: Promise<{ id:
   const [totalVagas, setTotalVagas] = useState<number | "">("");
   const [url, setUrl] = useState("");
 
+  const [initialNome, setInitialNome] = useState("");
+  const [initialPreco, setInitialPreco] = useState<number | "">("");
+  const [initialTipo, setInitialTipo] = useState<TipoServico>("STREAMING_VIDEO");
+  const [initialTotalVagas, setInitialTotalVagas] = useState<number | "">("");
+  const [initialUrl, setInitialUrl] = useState("");
+
   const [loading, setLoading] = useState(false);
   const [loadingData, setLoadingData] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -37,6 +43,12 @@ export default function EditarPlataformaPage({ params }: { params: Promise<{ id:
         setTipo(p?.tipo_servico ?? p?.tipoServico ?? "STREAMING_VIDEO");
         setTotalVagas(typeof p?.total_vagas === "number" ? p.total_vagas : p?.totalVagas ? Number(p.totalVagas) : "");
         setUrl(p?.url ?? "");
+
+        setInitialNome(p?.nome ?? p?.name ?? "");
+        setInitialPreco(typeof p?.preco === "number" ? p.preco : p?.preco ? Number(p.preco) : "");
+        setInitialTipo(p?.tipo_servico ?? p?.tipoServico ?? "STREAMING_VIDEO");
+        setInitialTotalVagas(typeof p?.total_vagas === "number" ? p.total_vagas : p?.totalVagas ? Number(p.totalVagas) : "");
+        setInitialUrl(p?.url ?? "");
       } catch (e: any) {
         setError(e?.message || "Erro ao carregar plataforma");
       } finally {
@@ -47,6 +59,28 @@ export default function EditarPlataformaPage({ params }: { params: Promise<{ id:
       isMounted = false;
     };
   }, [id]);
+
+  const isDirty = useMemo(() => {
+    const precoStr = preco === "" ? "" : String(preco);
+    const iPrecoStr = initialPreco === "" ? "" : String(initialPreco);
+    const vagasStr = totalVagas === "" ? "" : String(totalVagas);
+    const iVagasStr = initialTotalVagas === "" ? "" : String(initialTotalVagas);
+    return (
+      nome !== initialNome ||
+      precoStr !== iPrecoStr ||
+      tipo !== initialTipo ||
+      vagasStr !== iVagasStr ||
+      url !== initialUrl
+    );
+  }, [nome, preco, initialPreco, tipo, initialTipo, totalVagas, initialTotalVagas, url, initialUrl]);
+
+  const closeModal = () => {
+    if (isDirty) {
+      const ok = confirm("Existem alterações não salvas. Deseja sair sem salvar?");
+      if (!ok) return;
+    }
+    router.push(`/plataformas`);
+  };
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,8 +105,9 @@ export default function EditarPlataformaPage({ params }: { params: Promise<{ id:
 
   return (
     <Protected>
-      <div className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4">
+      <div className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4" onClick={closeModal}>
         <section
+          onClick={(e) => e.stopPropagation()}
           className={[
             "group relative w-full max-w-2xl rounded-2xl border p-5 transition-all",
             "shadow-[inset_0_0_0_1px_rgba(255,255,255,0.02)]",
@@ -101,6 +136,10 @@ export default function EditarPlataformaPage({ params }: { params: Promise<{ id:
                 style={{ borderColor: "var(--border)", background: "var(--bg)" }}
                 aria-label="Fechar"
                 title="Fechar"
+                onClick={(e) => {
+                  e.preventDefault();
+                  closeModal();
+                }}
               >
                 <FontAwesomeIcon icon={faXmark} />
               </Link>
@@ -183,6 +222,10 @@ export default function EditarPlataformaPage({ params }: { params: Promise<{ id:
                     href={`/plataformas/${id}`}
                     className="rounded-md border px-4 py-2"
                     style={{ borderColor: "var(--border)", background: "var(--bg)" }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      closeModal();
+                    }}
                   >
                     Cancelar
                   </Link>

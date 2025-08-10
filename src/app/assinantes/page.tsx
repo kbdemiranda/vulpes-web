@@ -116,15 +116,6 @@ function ListCards({
 }) {
   const rows = useMemo(() => toArray(data), [data]);
 
-  const formatCurrency = (v?: number) => {
-    if (v == null) return "-";
-    try {
-      return v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-    } catch {
-      return String(v);
-    }
-  };
-
   const getInitials = (name?: string) => {
     if (!name) return "A";
     const parts = name.trim().split(/\s+/);
@@ -136,8 +127,6 @@ function ListCards({
   return (
     <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
       {rows.map((r) => {
-        const valor = (r as any).valor_total ?? r.valor_por_mes;
-        const valorLabel = (r as any).valor_total != null ? "Valor total" : "Valor/mês";
         return (
           <section
             key={r.id}
@@ -215,17 +204,6 @@ function ListCards({
                   >
                     <FontAwesomeIcon icon={faTrash} />
                   </button>
-                </div>
-              </div>
-
-              <div className="mt-2 flex items-end justify-between">
-                <div>
-                  <div className="text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
-                    {valorLabel}
-                  </div>
-                  <div className="mt-1 text-2xl font-bold" style={{ color: "var(--fg)" }}>
-                    {formatCurrency(valor)}
-                  </div>
                 </div>
               </div>
 

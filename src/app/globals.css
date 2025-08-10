@@ -1,26 +1,40 @@
 @import "tailwindcss";
 
+/* Brand tokens */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --primary: #F25C05; /* orange */
+  --accent: #401902;  /* brown */
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Dark theme (default) */
+:root[data-theme="dark"] {
+  --bg: #0D0D0D;      /* dark */
+  --fg: #ffffff;      /* white */
+  --surface: #141414; /* panels/cards */
+  --input: #121212;   /* inputs */
+  --border: #401902;  /* accent brown */
+  --muted: #d1d5db;   /* secondary text */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Light theme */
+:root[data-theme="light"] {
+  --bg: #ffffff;      /* white */
+  --fg: #0D0D0D;      /* dark */
+  --surface: #f6f6f6; /* panels/cards */
+  --input: #ffffff;   /* inputs */
+  --border: #401902;  /* accent brown */
+  --muted: #374151;   /* secondary text */
 }
+
+html, body { height: 100%; }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
 }
+
+/* Utility helpers for transitions */
+.theme-transition {
+  transition: background-color .2s ease, color .2s ease, border-color .2s ease;
+}
+

@@ -1,0 +1,178 @@
+"use client";
+
+import Protected from "@/components/Protected";
+import { Api } from "@/lib/api";
+import { use, useEffect, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { TIPO_SERVICO_OPTIONS } from "@/lib/tipoServico";
+import type { TipoServico } from "@/lib/tipoServico";
+
+export default function EditarPlataformaPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id: idParam } = use(params);
+  const id = Number(idParam);
+  const router = useRouter();
+
+  const [nome, setNome] = useState("");
+  const [preco, setPreco] = useState<number | "">("");
+  const [tipo, setTipo] = useState<TipoServico>("STREAMING_VIDEO");
+  const [totalVagas, setTotalVagas] = useState<number | "">("");
+  const [url, setUrl] = useState("");
+
+  const [loading, setLoading] = useState(false);
+  const [loadingData, setLoadingData] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    (async () => {
+      try {
+        setLoadingData(true);
+        const p = await Api.getPlataforma(id);
+        if (!isMounted) return;
+        setNome(p?.nome ?? p?.name ?? "");
+        setPreco(typeof p?.preco === "number" ? p.preco : p?.preco ? Number(p.preco) : "");
+        setTipo(p?.tipo_servico ?? p?.tipoServico ?? "STREAMING_VIDEO");
+        setTotalVagas(typeof p?.total_vagas === "number" ? p.total_vagas : p?.totalVagas ? Number(p.totalVagas) : "");
+        setUrl(p?.url ?? "");
+      } catch (e: any) {
+        setError(e?.message || "Erro ao carregar plataforma");
+      } finally {
+        setLoadingData(false);
+      }
+    })();
+    return () => {
+      isMounted = false;
+    };
+  }, [id]);
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    try {
+      await Api.atualizarPlataforma(id, {
+        nome,
+        preco: typeof preco === "string" ? 0 : preco,
+        tipo_servico: tipo,
+        total_vagas: typeof totalVagas === "string" ? 0 : totalVagas,
+        ...(url ? { url } : {}),
+      });
+      // Redireciona para detalhes após salvar
+      router.push(`/plataformas/${id}`);
+    } catch (e: any) {
+      setError(e?.message || "Erro ao atualizar plataforma");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <Protected>
+      <h1 className="mb-4 text-2xl font-semibold" style={{ color: "var(--primary)" }}>
+        Editar Plataforma
+      </h1>
+      <section className="theme-transition rounded-lg border p-4" style={{ borderColor: "var(--border)", background: "var(--surface)" }}>
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-lg font-semibold">Formulário</h2>
+          <div className="flex items-center gap-2">
+            <Link href={`/plataformas/${id}`} className="rounded-md border px-3 py-2 text-sm" style={{ borderColor: "var(--border)", background: "var(--bg)" }}>
+              Voltar
+            </Link>
+          </div>
+        </div>
+
+        {error && <p className="mb-2 text-sm text-red-400">{error}</p>}
+
+        {loadingData ? (
+          <p className="text-sm opacity-80">Carregando...</p>
+        ) : (
+          <form onSubmit={onSubmit} className="grid gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div>
+                <label className="mb-1 block text-sm" style={{ color: "var(--muted)" }}>
+                  Nome
+                </label>
+                <input
+                  required
+                  value={nome}
+                  onChange={(e) => setNome(e.target.value)}
+                  className="w-full rounded border border-[var(--border)] bg-[var(--input)] p-2"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-sm" style={{ color: "var(--muted)" }}>
+                  Preço
+                </label>
+                <input
+                  required
+                  type="number"
+                  step="0.01"
+                  value={preco}
+                  onChange={(e) => setPreco(e.target.value === "" ? "" : parseFloat(e.target.value))}
+                  className="w-full rounded border border-[var(--border)] bg-[var(--input)] p-2"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-sm" style={{ color: "var(--muted)" }}>
+                  Tipo de serviço
+                </label>
+                <select
+                  className="w-full rounded border border-[var(--border)] bg-[var(--input)] p-2"
+                  value={tipo}
+                  onChange={(e) => setTipo(e.target.value as TipoServico)}
+                  required
+                >
+                  {TIPO_SERVICO_OPTIONS.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="mb-1 block text-sm" style={{ color: "var(--muted)" }}>
+                  Total de vagas
+                </label>
+                <input
+                  required
+                  type="number"
+                  value={totalVagas}
+                  onChange={(e) => setTotalVagas(e.target.value === "" ? "" : parseInt(e.target.value, 10))}
+                  className="w-full rounded border border-[var(--border)] bg-[var(--input)] p-2"
+                />
+              </div>
+              <div className="md:col-span-2">
+                <label className="mb-1 block text-sm" style={{ color: "var(--muted)" }}>
+                  URL (opcional)
+                </label>
+                <input
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
+                  className="w-full rounded border border-[var(--border)] bg-[var(--input)] p-2"
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-2">
+              <Link
+                href={`/plataformas/${id}`}
+                className="rounded border px-3 py-2"
+                style={{ borderColor: "var(--border)" }}
+              >
+                Cancelar
+              </Link>
+              <button
+                disabled={loading}
+                className="rounded px-3 py-2"
+                style={{ background: "var(--primary)", color: "var(--fg)" }}
+              >
+                {loading ? "Salvando..." : "Salvar alterações"}
+              </button>
+            </div>
+          </form>
+        )}
+      </section>
+    </Protected>
+  );
+}

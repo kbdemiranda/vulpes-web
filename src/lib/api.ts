@@ -108,5 +108,7 @@ export const Api = {
 
   // Plataformas by id and delete
   getPlataforma: (id: number) => apiFetch<any>(`/plataformas/${id}`),
+  atualizarPlataforma: (id: number, body: any) =>
+    apiFetch<any>(`/plataformas/${id}`, { method: "PUT", body: JSON.stringify(body) }),
   deletePlataforma: (id: number) => apiFetch<any>(`/plataformas/${id}`, { method: "DELETE" }),
 };

@@ -36,9 +36,9 @@ export default function PlataformaDetalhe({ params }: { params: Promise<{ id: st
           <h2 className="text-lg font-semibold">Detalhes</h2>
           <div className="flex items-center gap-2">
             <Link href="/plataformas" className="rounded-md border px-3 py-2 text-sm" style={{ borderColor: "var(--border)", background: "var(--bg)" }}>Voltar</Link>
-            <button onClick={fetchData} className="rounded-md border px-3 py-2 text-sm" style={{ borderColor: "var(--border)", background: "var(--bg)" }}>
-              {loading ? "Carregando..." : "Atualizar"}
-            </button>
+            <Link href={`/plataformas/${id}/editar`} className="rounded-md border px-3 py-2 text-sm" style={{ borderColor: "var(--border)", background: "var(--bg)" }}>
+              Editar
+            </Link>
           </div>
         </div>
         {error && <p className="mb-2 text-sm text-red-400">{error}</p>}

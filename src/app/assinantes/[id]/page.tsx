@@ -38,6 +38,9 @@ export default function AssinanteDetalhe({ params }: { params: Promise<{ id: str
           <h2 className="text-lg font-semibold">Perfil</h2>
           <div className="flex items-center gap-2">
             <Link href="/assinantes" className="rounded-md border px-3 py-2 text-sm" style={{ borderColor: "var(--border)", background: "var(--bg)" }}>Voltar</Link>
+            <Link href={`/assinantes/${id}/editar`} className="rounded-md border px-3 py-2 text-sm" style={{ borderColor: "var(--border)", background: "var(--bg)" }}>
+              Editar
+            </Link>
             <button onClick={fetchData} className="rounded-md border px-3 py-2 text-sm" style={{ borderColor: "var(--border)", background: "var(--bg)" }}>
               {loading ? "Carregando..." : "Atualizar"}
             </button>

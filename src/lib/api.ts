@@ -76,6 +76,8 @@ export const Api = {
   cadastrarAssinante: (body: any) =>
     apiFetch<any>(`/assinantes`, { method: "POST", body: JSON.stringify(body) }),
   getAssinante: (id: number) => apiFetch<any>(`/assinantes/${id}`),
+  atualizarAssinante: (id: number, body: any) =>
+    apiFetch<any>(`/assinantes/${id}`, { method: "PUT", body: JSON.stringify(body) }),
   deleteAssinante: (id: number) => apiFetch<any>(`/assinantes/${id}`, { method: "DELETE" }),
   associarPlataformas: (id: number, body: { plataformaIds: number[] }) =>
     apiFetch<any>(`/assinantes/${id}/associar-plataformas`, {

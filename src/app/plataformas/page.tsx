@@ -6,6 +6,8 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faPenToSquare, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { tipoServicoToLabel, TIPO_SERVICO_OPTIONS } from "@/lib/tipoServico";
+import type { TipoServico } from "@/lib/tipoServico";
 
 export default function PlataformasPage() {
   const router = useRouter();
@@ -87,7 +89,7 @@ export default function PlataformasPage() {
   );
 }
 
-type Row = { id: number; nome?: string; preco?: number; tipo_servico?: string; total_vagas?: number; vagas_disponiveis?: number };
+type Row = { id: number; nome?: string; preco?: number; tipo_servico?: TipoServico; total_vagas?: number; vagas_disponiveis?: number };
 
 function toArray(input: any): Row[] {
   if (Array.isArray(input)) return input as Row[];
@@ -118,7 +120,7 @@ function PlatformsTable({ data, onView, onEdit, onDelete }: { data: any; onView:
             <tr key={r.id} className="border-b last:border-0" style={{ borderColor: "var(--border)" }}>
               <td className="px-2 py-2">{r.id}</td>
               <td className="px-2 py-2">{r.nome}</td>
-              <td className="px-2 py-2">{r.tipo_servico}</td>
+              <td className="px-2 py-2">{tipoServicoToLabel(r.tipo_servico) ?? "-"}</td>
               <td className="px-2 py-2">{r.preco}</td>
               <td className="px-2 py-2">{r.total_vagas}</td>
               <td className="px-2 py-2">{r.vagas_disponiveis ?? "-"}</td>
@@ -153,7 +155,7 @@ function PlatformsTable({ data, onView, onEdit, onDelete }: { data: any; onView:
 function CreatePlataformaModal({ onClose, onCreated }: { onClose: () => void; onCreated: () => void }) {
   const [nome, setNome] = useState("");
   const [preco, setPreco] = useState<number | "">("");
-  const [tipo, setTipo] = useState("STREAMING_VIDEO");
+  const [tipo, setTipo] = useState<TipoServico>("STREAMING_VIDEO");
   const [totalVagas, setTotalVagas] = useState<number | "">("");
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
@@ -197,17 +199,16 @@ function CreatePlataformaModal({ onClose, onCreated }: { onClose: () => void; on
           </div>
           <div>
             <label className="mb-1 block text-sm" style={{ color: "var(--muted)" }}>Tipo de serviço</label>
-            <select className="w-full rounded border border-[var(--border)] bg-[var(--input)] p-2" value={tipo} onChange={(e) => setTipo(e.target.value)} required>
-              {[
-                "STREAMING_VIDEO",
-                "STREAMING_MUSICA",
-                "SOFTWARE",
-                "JOGOS",
-                "NOTICIAS",
-                "CLOUD_STORAGE",
-                "FITNESS",
-              ].map((t) => (
-                <option key={t} value={t}>{t}</option>
+            <select
+              className="w-full rounded border border-[var(--border)] bg-[var(--input)] p-2"
+              value={tipo}
+              onChange={(e) => setTipo(e.target.value as TipoServico)}
+              required
+            >
+              {TIPO_SERVICO_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
               ))}
             </select>
           </div>

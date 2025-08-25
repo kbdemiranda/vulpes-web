@@ -92,6 +92,9 @@ export const Api = {
       method: "DELETE",
     }),
 
+  // Usuários
+  getUsuario: (id: number) => apiFetch<any>(`/usuarios/buscarPorID/${id}`),
+
   // Pagamentos
   listarPagamentos: (params?: { nomeAssinante?: string; pagina?: number; quantidade?: number }) => {
     const usp = new URLSearchParams();

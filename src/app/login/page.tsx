@@ -29,7 +29,7 @@ export default function LoginPage() {
 
   return (
     <div className="theme-transition mx-auto max-w-md rounded-lg border border-[var(--border)] bg-[var(--surface)] p-6 shadow">
-      <h1 className="mb-6 text-2xl font-semibold" style={{ color: "var(--primary)" }}>Vulpes — Login</h1>
+      <h1 className="mb-6 text-2xl font-semibold" style={{ color: "var(--primary)" }}>Login</h1>
       <form onSubmit={submit} className="space-y-4">
         <div>
           <label className="mb-1 block text-sm" style={{ color: "var(--muted)" }}>Email</label>
@@ -38,7 +38,7 @@ export default function LoginPage() {
             className="theme-transition w-full rounded-md border border-[var(--border)] bg-[var(--input)] p-2 outline-none focus:outline-[var(--primary)]"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="user@example.com"
+            placeholder="user@email.com"
             required
           />
         </div>

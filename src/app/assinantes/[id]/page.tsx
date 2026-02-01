@@ -6,7 +6,7 @@ import React from "react";
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faArrowLeft, faRotateRight } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faRotateRight, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 export default function AssinanteDetalhe({ params }: { params: Promise<{ id: string }> }) {
   const { id: idParam } = React.use(params);
@@ -14,6 +14,7 @@ export default function AssinanteDetalhe({ params }: { params: Promise<{ id: str
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [removingId, setRemovingId] = useState<number | null>(null);
 
   const fetchData = async () => {
     setLoading(true);
@@ -25,6 +26,24 @@ export default function AssinanteDetalhe({ params }: { params: Promise<{ id: str
       setError(e?.message || "Erro ao carregar assinante");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDesassociar = async (plataformaId: number) => {
+    if (!confirm("Deseja realmente desassociar esta plataforma?")) {
+      return;
+    }
+
+    setRemovingId(plataformaId);
+    setError(null);
+
+    try {
+      await Api.desassociarPlataforma(id, plataformaId);
+      await fetchData(); // Recarregar dados
+    } catch (e: any) {
+      setError(e?.message || "Erro ao desassociar plataforma");
+    } finally {
+      setRemovingId(null);
     }
   };
 
@@ -65,6 +84,15 @@ export default function AssinanteDetalhe({ params }: { params: Promise<{ id: str
               >
                 <FontAwesomeIcon icon={faArrowLeft} />
               </Link>
+              <Link
+                href={`/assinantes/${id}/associar-plataformas`}
+                className="rounded-md border p-2"
+                style={{ borderColor: "var(--border)", background: "var(--bg)" }}
+                aria-label="Associar plataformas"
+                title="Associar plataformas"
+              >
+                <FontAwesomeIcon icon={faPlus} />
+              </Link>
               <button
                 onClick={fetchData}
                 className="rounded-md border p-2"
@@ -78,25 +106,14 @@ export default function AssinanteDetalhe({ params }: { params: Promise<{ id: str
             </div>
           </div>
           {error && <p className="mb-2 text-sm text-red-400">{error}</p>}
-          <ReadOnlyForm assinante={data} />
+          <ReadOnlyForm assinante={data} onDesassociar={handleDesassociar} removingId={removingId} />
         </div>
       </section>
     </Protected>
   );
 }
 
-function ReadOnlyField({ label, value }: { label: string; value?: React.ReactNode }) {
-  return (
-    <div>
-      <label className="mb-1 block text-xs" style={{ color: "var(--muted)" }}>{label}</label>
-      <div className="rounded border px-3 py-2 text-sm" style={{ borderColor: "var(--border)", background: "var(--bg)" }}>
-        {value ?? <span className="opacity-60">-</span>}
-      </div>
-    </div>
-  );
-}
-
-function ReadOnlyForm({ assinante }: { assinante: any }) {
+function ReadOnlyForm({ assinante, onDesassociar, removingId }: { assinante: any; onDesassociar: (id: number) => void; removingId: number | null }) {
   const pick = (obj: any, keys: string[]): any =>
     keys.find((k) => obj && obj[k] !== undefined)
       ? obj[keys.find((k) => obj && obj[k] !== undefined)!]
@@ -212,6 +229,19 @@ function ReadOnlyForm({ assinante }: { assinante: any }) {
                         ID #{p.id}
                       </div>
                     </div>
+                    <button
+                      onClick={() => onDesassociar(p.id)}
+                      disabled={removingId === p.id}
+                      className="rounded-md border p-2 text-red-500 transition-all hover:bg-red-500/10 disabled:opacity-50"
+                      style={{ borderColor: "var(--border)" }}
+                      title="Desassociar plataforma"
+                    >
+                      {removingId === p.id ? (
+                        <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-solid border-current border-r-transparent" />
+                      ) : (
+                        <FontAwesomeIcon icon={faTrash} />
+                      )}
+                    </button>
                   </div>
                   <div className="mt-2 grid grid-cols-2 gap-4">
                     <div>

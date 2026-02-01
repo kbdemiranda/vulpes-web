@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  # Aplicação Web Next.js
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vulpes-web
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      # Ajuste a URL da API conforme necessário
+      - NEXT_PUBLIC_API_BASE=${NEXT_PUBLIC_API_BASE:-http://api:8080/api}
+    depends_on:
+      - api
+    networks:
+      - vulpes-network
+    restart: unless-stopped
+
+  # API Backend (ajustar conforme sua stack)
+  # Descomente e configure conforme necessário
+  api:
+    # Exemplo se a API for Node.js
+    # build:
+    #   context: ../vulpes-api
+    #   dockerfile: Dockerfile
+    image: placeholder/vulpes-api:latest  # Substituir pela imagem real da API
+    container_name: vulpes-api
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=production
+      # Adicionar variáveis de ambiente da API conforme necessário
+    networks:
+      - vulpes-network
+    restart: unless-stopped
+    # Se a API precisar de banco de dados, adicionar depends_on
+    # depends_on:
+    #   - database
+
+  # Exemplo de serviço de banco de dados (descomente se necessário)
+  # database:
+  #   image: postgres:15-alpine
+  #   container_name: vulpes-db
+  #   environment:
+  #     - POSTGRES_USER=vulpes
+  #     - POSTGRES_PASSWORD=vulpes_password
+  #     - POSTGRES_DB=vulpes_db
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   networks:
+  #     - vulpes-network
+  #   restart: unless-stopped
+
+networks:
+  vulpes-network:
+    driver: bridge
+
+# Volumes para persistência de dados (descomente se necessário)
+# volumes:
+#   postgres_data:
